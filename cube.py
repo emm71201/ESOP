@@ -96,14 +96,30 @@ class Cube:
     def __str__(self):
 
         result = ""
-        for i in range(len(self.expression)):
+        for i in range(len(self.expression) - 1):
 
             if self.expression[i] == "0":
 
-                result += "~" + string.ascii_lowercase[i] 
+                result += "~" + f"x{i} & "
             
-            if self.expression[i] == "1":
+            elif self.expression[i] == "1":
+                result += f"x{i} & "
+        
+        i = len(self.expression) - 1
+        if self.expression[i] == "0":
 
-                result += f"{string.ascii_lowercase[i]}"
+            result += "~" + f"x{i}"
+        
+        elif self.expression[i] == "1":
+            result += f"x{i}"
+        
+        if result == "":
+            return result
+
+        if result[-1] == " ":
+            result = result[:-1]
+
+        if result[-1] == "&":
+            result = result[:-1]
         
         return result
