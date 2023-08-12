@@ -17,7 +17,7 @@ class Cube:
         
         self.expression = expression
     
-
+    
     def weight(self):
 
         return sum(self.expression[c] != "-" \
@@ -60,6 +60,63 @@ class Cube:
                 new_expression += self.expression[i]
         
         return Cube(new_expression)
+
+    def copy(self):
+        """ create a new cube with the same data """
+
+        return Cube(self.expression)
+    
+    def change_literal(self, pos, newlit):
+
+        new_expression = self.expression[:pos] + newlit + self.expression[pos+1:]
+
+        self.expression = new_expression
+
+        return
+    
+    def expansion(self):
+
+        cubes_list = [self.copy()]
+        n = len(self.expression)
+        pos = 0
+
+        while pos < n:
+
+            tmp = []
+
+            for cube in cubes_list:
+
+                if cube.expression[pos] == "0":
+
+                    exp1 = cube.expression[:pos] + "-" + cube.expression[pos+1:]
+                    exp2 = cube.expression[:pos] + "1" + cube.expression[pos+1:]
+
+                    tmp.append(Cube(exp1))
+                    tmp.append(Cube(exp2))
+                
+                if cube.expression[pos] == "1":
+
+
+                    exp1 = cube.expression[:pos] + "-" + cube.expression[pos+1:]
+                    exp2 = cube.expression[:pos] + "0" + cube.expression[pos+1:]
+
+                    tmp.append(Cube(exp1))
+                    tmp.append(Cube(exp2))
+                
+                if cube.expression[pos] == "-":
+
+                    exp1 = cube.expression[:pos] + "0" + cube.expression[pos+1:]
+                    exp2 = cube.expression[:pos] + "1" + cube.expression[pos+1:]
+
+                    tmp.append(Cube(exp1))
+                    tmp.append(Cube(exp2))
+
+
+            cubes_list = tmp
+        
+            pos += 1
+        
+        return cubes_list
     
     def toffoli_gate(self, labels = None, anc_label = None):
         """ convert the cube to a multi-controlled not gate also called Tofolli gate 
@@ -94,6 +151,9 @@ class Cube:
         return qc  
 
     def __str__(self):
+
+        if self.expression == "-"*len(self.expression):
+            return "1"
 
         result = ""
         for i in range(len(self.expression) - 1):

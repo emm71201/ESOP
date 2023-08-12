@@ -48,3 +48,27 @@ def ANF_from_alphabetical(nbits, anf_str):
         result = result[:-1]
     
     return result
+
+def select_pair(G):
+
+    """ input : networkx graph"""
+
+    weight = None
+    min_edge = None
+    for edge in G.edges:
+
+        a,b = edge
+        tmp_weight = G[a][b]['weight']
+
+        if weight is None and min_edge is None:
+            min_edge = (a,b)
+            weight = tmp_weight
+        
+        
+        if tmp_weight < weight:
+            min_edge = (a,b)
+            weight = tmp_weight
+    
+    c1,c2 = min_edge
+    
+    return min_edge
