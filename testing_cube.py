@@ -23,3 +23,9 @@ for i in range(len(cubes)):
 # %%
 cubes[0].toffoli_gate().draw()
 # %%
+# Testing the expansion
+exp = "111"
+cube = Cube(exp)
+for cc in cube.expansion():
+    print(cc)
+# %%

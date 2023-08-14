@@ -65,7 +65,7 @@ def select_pair(G):
             weight = tmp_weight
         
         
-        if tmp_weight < weight:
+        if tmp_weight > weight:
             min_edge = (a,b)
             weight = tmp_weight
     

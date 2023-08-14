@@ -116,33 +116,46 @@ class ANF(ESOP):
 # labels = nx.get_edge_attributes(G, 'weight')
 # nx.draw(G)
 # %%
-# cb1 = Cube("1110")
-# cb2 = Cube("0-1-")
-# cb3 = Cube("-011")
-# cb4 = Cube("1101")
-# cb5 = Cube("1-00")
-# esop1 = ESOP(cb1.expansion())
-# esop2 = ESOP(cb2.expansion())
-# esop3 = ESOP(cb3.expansion())
-# esop4 = ESOP(cb4.expansion())
-# esop5 = ESOP(cb4.expansion())
-# total = esop1.add_esops(esop2, esop3, esop4, esop5)
-# # %%
-# for cube in esop1.cubes:
-#     print(cube)
-# # %%
-# for cube in esop2.cubes:
-#     print(cube)
-# # %%
-# for cube in total.cubes:
-#     print(cube)
-# # %%
-# nx.draw(total.combination_graph())
-# # %%
-# G = total.reduce()
-# # %%
-# nx.draw(G)
-# # %%
-# for node in G.nodes():
-#     print(node)
+cb1 = Cube("1110")
+cb2 = Cube("0-1-")
+cb3 = Cube("-011")
+cb4 = Cube("1101")
+cb5 = Cube("1-00")
+esop1 = ESOP(cb1.expansion())
+esop2 = ESOP(cb2.expansion())
+esop3 = ESOP(cb3.expansion())
+esop4 = ESOP(cb4.expansion())
+esop5 = ESOP(cb4.expansion())
+total = esop1.add_esops(esop2, esop3, esop4, esop5)
+# %%
+for cube in esop1.cubes:
+    print(cube)
+# %%
+for cube in esop2.cubes:
+    print(cube)
+# %%
+for cube in total.cubes:
+    print(cube)
+# %%
+nx.draw(total.combination_graph())
+# %%
+G = total.reduce()
+# %%
+nx.draw(G)
+# %%
+for node in G.nodes():
+    print(node)
+# %%
+cb1 = Cube("110")
+cb2 = Cube("0-1")
+total = ESOP(cb1.expansion()).add_esops(ESOP(cb2.expansion()))
+nx.draw(total.combination_graph())
+# %%
+for cube in total.cubes:
+    print(cube)
+# %%
+nx.draw(total.reduce())
+# %%
+for node in total.reduce().nodes():
+    print(node)
 # %%
