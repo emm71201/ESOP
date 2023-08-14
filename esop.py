@@ -51,23 +51,41 @@ class ESOP:
         The weight of each edge is the weight of the combined cube if the cubes were combined.
         """
 
-        # figure out the edges
-        edges = []
-        for i in range(len(self.cubes)):
-            for j in range(i, len(self.cubes)):
-                try:
-                    c1 = self.cubes[i]
-                    c2 = self.cubes[j]
-                except:
-                    print("issue in making graph", i,j, self.cubes)
-                if c1.distance(c2) == 1:
-                    weight = (c1.xor_combine(c2)).weight()
-                    edges.append((c1, c2, weight))
-        
-        # make graph
         G = nx.Graph()
-        G.add_nodes_from(self.cubes)
-        G.add_weighted_edges_from(edges)
+        for i in range(len(self.cubes)):
+
+            print(f"i = {i}")
+
+            c1 = self.cubes[i]
+            G.add_node(c1)
+
+            for j in range(i+1, len(self.cubes)):
+
+                c2 = self.cubes[j]
+                G.add_node(c2)
+
+                if c1.distance(c2) == 1:
+
+                    G.add_edge(c1, c2)
+
+        # # figure out the edges
+        # edges = []
+        # for i in range(len(self.cubes)):
+        #     for j in range(i, len(self.cubes)):
+        #         try:
+        #             c1 = self.cubes[i]
+        #             c2 = self.cubes[j]
+        #         except:
+        #             print("issue in making graph", i,j, self.cubes)
+        #         if c1.distance(c2) == 1:
+        #             #weight = (c1.xor_combine(c2)).weight()
+        #             weight = 1
+        #             edges.append((c1, c2, weight))
+        
+        # # make graph
+        # G = nx.Graph()
+        # G.add_nodes_from(self.cubes)
+        # G.add_weighted_edges_from(edges)
 
         return G
 
@@ -85,7 +103,10 @@ class ESOP:
         while G.number_of_edges() > 0:
 
             # get the pair to combine and create the combination
-            n1, n2 = helpers.select_pair(G)
+            #n1, n2 = helpers.select_pair(G)
+            #new_node = n1.xor_combine(n2)
+
+            n1, n2 = list(G.edges)[0]
             new_node = n1.xor_combine(n2)
             #print(n1, n2, new_node)
 
@@ -97,10 +118,10 @@ class ESOP:
             G.add_node(new_node)
 
             # add the new node and all the weighted edges if any
-            new_edges = [(new_node, n, (new_node.xor_combine(n)).weight()) \
-                        for n in G.nodes() if new_node.distance(n) == 1]
+            # new_edges = [(new_node, n, (new_node.xor_combine(n)).weight()) \
+            #             for n in G.nodes() if new_node.distance(n) == 1]
 
-            G.add_weighted_edges_from(new_edges)
+            # G.add_weighted_edges_from(new_edges)
         
         return G
 # %%
@@ -128,34 +149,34 @@ esop4 = ESOP(cb4.expansion())
 esop5 = ESOP(cb4.expansion())
 total = esop1.add_esops(esop2, esop3, esop4, esop5)
 # %%
-for cube in esop1.cubes:
-    print(cube)
-# %%
-for cube in esop2.cubes:
-    print(cube)
-# %%
-for cube in total.cubes:
-    print(cube)
-# %%
-nx.draw(total.combination_graph())
-# %%
-G = total.reduce()
-# %%
-nx.draw(G)
-# %%
-for node in G.nodes():
-    print(node)
-# %%
-cb1 = Cube("110")
-cb2 = Cube("0-1")
-total = ESOP(cb1.expansion()).add_esops(ESOP(cb2.expansion()))
-nx.draw(total.combination_graph())
-# %%
-for cube in total.cubes:
-    print(cube)
-# %%
-nx.draw(total.reduce())
-# %%
-for node in total.reduce().nodes():
-    print(node)
+# for cube in esop1.cubes:
+#     print(cube)
+# # %%
+# for cube in esop2.cubes:
+#     print(cube)
+# # %%
+# for cube in total.cubes:
+#     print(cube)
+# # %%
+# nx.draw(total.combination_graph())
+# # %%
+# G = total.reduce()
+# # %%
+# nx.draw(G)
+# # %%
+# for node in G.nodes():
+#     print(node)
+# # %%
+# cb1 = Cube("110")
+# cb2 = Cube("0-1")
+# total = ESOP(cb1.expansion()).add_esops(ESOP(cb2.expansion()))
+# nx.draw(total.combination_graph())
+# # %%
+# for cube in total.cubes:
+#     print(cube)
+# # %%
+# nx.draw(total.reduce())
+# # %%
+# for node in total.reduce().nodes():
+#     print(node)
 # %%
