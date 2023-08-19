@@ -1,6 +1,7 @@
 #%%
 from cube import Cube
 import random
+import numpy
 # %%
 # initialize cubes randomly and check the string output
 # print the weight of each cube as well
@@ -24,8 +25,24 @@ for i in range(len(cubes)):
 cubes[0].toffoli_gate().draw()
 # %%
 # Testing the expansion
-exp = "111"
+exp = "10-11"
 cube = Cube(exp)
 for cc in cube.expansion():
     print(cc)
+# %%
+print(cube)
+# %%
+cube.evaluate_input("-1-")
+# %%
+cube = Cube("1011-01--1010-1-")
+mt, nt = cube.minterms_noterms()
+# %%
+len(mt) + len(nt)
+# %%
+numpy.log(len(mt) + len(nt))/numpy.log(2)
+# %%
+c1 = Cube("110")
+c2 = Cube("111")
+# %%
+print(c1.xor_combine(c2))
 # %%

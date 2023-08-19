@@ -5,6 +5,7 @@
 from qiskit import QuantumCircuit , QuantumRegister
 from qiskit.circuit.library import MCXGate
 import string
+from numpy import binary_repr
 class Cube:
 
     def __init__(self, expression):
@@ -22,6 +23,38 @@ class Cube:
 
         return sum(self.expression[c] != "-" \
                    for c in range(len(self.expression)))
+    
+    def evaluate_input(self, input):
+        assert len(self) == len(input)
+
+        for i in range(len(self)):
+
+            if self.expression[i] == "-" or input[i] == "-":
+                pass
+
+            else:
+                if self.expression[i] != input[i]:
+                    return 0
+
+        return 1
+
+    
+    def minterms_noterms(self):
+        """ return two lists: ones and zeros
+        ones --> all the inputs that the cube evaluates to 1
+        zeros --> all the inputs that the cube evaluates to 0
+        """
+        minterms = []
+        noterms = []
+        for i in range(2**len(self)):
+            brepr = binary_repr(i, len(self))
+
+            if self.evaluate_input(brepr) == 0:
+                noterms.append(i)
+            else:
+                minterms.append(i)
+
+        return minterms, noterms
 
 
     def distance(self, other):
@@ -149,6 +182,10 @@ class Cube:
             qc.x(neg)
 
         return qc  
+    
+    def __len__(self):
+
+        return len(self.expression)
 
     def __str__(self):
 

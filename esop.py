@@ -20,6 +20,14 @@ class ESOP:
         
         else:
             self.cubes = data
+    
+    def evaluate(self, input):
+
+        return sum(cube.evaluate_input(input) for cube in self.cubes) % 2
+    
+    def cost(self):
+
+        return sum(cube.weight() for cube in self.cubes)
             
     
     def remove_duplicate_pairs(self):
@@ -53,8 +61,6 @@ class ESOP:
 
         G = nx.Graph()
         for i in range(len(self.cubes)):
-
-            print(f"i = {i}")
 
             c1 = self.cubes[i]
             G.add_node(c1)
@@ -117,13 +123,22 @@ class ESOP:
             #add the new node
             G.add_node(new_node)
 
+            # add all new edges
+            for node in G.nodes():
+                if new_node.distance(node) == 1:
+                    G.add_edge(new_node, node)
+
             # add the new node and all the weighted edges if any
             # new_edges = [(new_node, n, (new_node.xor_combine(n)).weight()) \
             #             for n in G.nodes() if new_node.distance(n) == 1]
 
             # G.add_weighted_edges_from(new_edges)
         
-        return G
+        return list(G.nodes())
+
+    def __len__(self):
+
+        return len(self.cubes)
 # %%
 class ANF(ESOP):
 

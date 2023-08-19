@@ -3,6 +3,9 @@
 # Build helper functions
 #%%
 import string
+from itertools import product as itproduct
+import os
+from numpy import save, load
 #%%
 def ANF_from_alphabetical(nbits, anf_str):
     """ 
@@ -72,3 +75,29 @@ def select_pair(G):
     c1,c2 = min_edge
     
     return min_edge
+
+def make_cubes_map(n):
+
+    fname = os.path.join("cache", f"cubes_{n}.npy")
+    cubemap = {}
+
+    if os.path.exists(fname):
+
+        cubemap = load(fname, allow_pickle=True).item()
+    
+    else:
+        indx = 0
+        for cube in itproduct(["-", "1", "0"], repeat=n):
+
+            cubemap["".join(list(cube))] = indx
+
+            indx += 1
+
+        save(fname, cubemap)
+    
+    return cubemap
+# %%
+cubes = make_cubes_map(10)
+# %%
+cubes
+# %%

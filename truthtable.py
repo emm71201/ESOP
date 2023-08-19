@@ -1,14 +1,17 @@
 
 #%%
-import esop
+from esop import ESOP
 import cube
 from numpy import binary_repr
+import networkx as nx
+from itertools import product as itproduct
 # %%
 class TruthTable:
 
     def __init__(self, n, data):
 
         self.minterms, self.noterms, self.dontcares = self.process_data(n, data)
+        self.n = n
 
     def process_data(self, n, data):
 
@@ -27,3 +30,12 @@ class TruthTable:
                 dontcares.append(cube.Cube(binary_repr(i, n)))
         
         return minterms,noterms, dontcares
+    
+
+#%%
+# for i in itproduct(["0","1","-"], repeat=16):
+#     print("".join(list(i)))
+# %%
+# import numpy as np
+# np.save("cache/cubes16.npy",np.array([cube.Cube("".join(list(i))) for i in itproduct(["0","1","-"], repeat=16)]))
+# %%
