@@ -13,11 +13,13 @@ import numpy as np
 import os
 from itertools import product as itproduct
 
+
 import galois
 GF = galois.GF(2)
 #%%
 class BF:
 
+    
     def __init__(self, n, ttable):
         """ take the truth table as a string of length 2^n 
         The string contains 0, 1, - (- means don't-care)
@@ -32,9 +34,11 @@ class BF:
         self.evens_neighborhoods = self.get_neighborhoods(self.evens)
         self.odds_neighborhoods = self.get_neighborhoods(self.odds)
     
+    
     def __len__(self):
 
         return self.length
+    
     
     def get_even_odd(self):
 
@@ -50,9 +54,11 @@ class BF:
         
         return odds, evens
     
+    
     def get_cubes(self):
 
         return make_cubes_map(self.n)
+    
     
     def get_neighborhoods(self, nodes):
 
@@ -65,6 +71,7 @@ class BF:
         return result
     
 
+    
     def mapvector(self, cubeset):
 
         result = GF.Zeros(shape=3**self.n)
@@ -75,6 +82,7 @@ class BF:
         
         return result
     
+    
     def make_solution_matrix(self):
 
         """ form the equation matrix * c = y"""
@@ -82,7 +90,7 @@ class BF:
         matrix = []
         Y = []
 
-        for even, ngb in bf.evens_neighborhoods.items():
+        for even, ngb in self.evens_neighborhoods.items():
 
             vect = self.mapvector(ngb)
             vect = npappend(vect, 0)
@@ -91,7 +99,7 @@ class BF:
             matrix.append(vect)
 
         
-        for odd, ngb in bf.odds_neighborhoods.items():
+        for odd, ngb in self.odds_neighborhoods.items():
 
             vect = self.mapvector(ngb)
             vect = npappend(vect, 1)
@@ -101,39 +109,63 @@ class BF:
 
         
         return GF(matrix), GF(Y)
-##%
-# try on BT
-n = 10
-ttable = load("cache/BT_Table.npy")
-bf = BF(n, ttable[0])
-#matrix, Y = bf.make_solution_matrix()
-#nspace = matrix.null_space()
-nspace = load("cache/nspace_BT_0.npy")
+    
+    
+    def valiate_esop(self, esop):
+
+        for i in range(len(self)):
+
+            if self.data[i] != "-":
+
+                brepr = binary_repr(i, self.n)
+
+                if esop.evaluate(brepr) != int(self.data[i]):
+
+                    return False
+
+        return True
 #%%
-cubemap = bf.cubemap
-all_cubes_list = list(cubemap.keys())
-# %%
-bestesop = None
-bestcost = np.inf
-for nvect in nspace:
-    if nvect[-1] == 1:
-        coordinates = np.where(nvect[:-1] == 1)[0]
-        cubes_list= []
-        for c in coordinates:
-            cubes_list.append(Cube(all_cubes_list[c]))
+# try on BT
+# n = 10
+# ttable = load("cache/BT_Table.npy")
+# bf = BF(n, ttable[4])
+# matrix, Y = bf.make_solution_matrix()
+# nspace = matrix.null_space()
+# #nspace = load("cache/nspace_BT_0.npy")
+# #%%
+# cubemap = bf.cubemap
+# all_cubes_list = list(cubemap.keys())
+# # %%
+# bestesop = None
+# bestcost = np.inf
+# for nvect in nspace:
+#     if nvect[-1] == 1:
+#         coordinates = np.where(nvect[:-1] == 1)[0]
+#         cubes_list= []
+#         for c in coordinates:
+#             cubes_list.append(Cube(all_cubes_list[c]))
         
-        myesop = ESOP(cubes_list)
-        print("Starting reduction")
-        reduced = myesop.reduce()
-        if len(reduced) < bestcost:
-            bestesop = reduced
-            bestcost = len(reduced)
-        #print(f"Number of terms {len(reduced)}")
-        # for cubered in reduced:
-        #     print(cubered)
-        print("------------")
-# %%
-print(bestesop[0])
-# %%
-np.save("cache/nspace_BT_0.npy", nspace)
-# %%
+#         myesop = ESOP(cubes_list)
+#         print("Starting reduction")
+#         reduced = ESOP(myesop.reduce())
+#         if reduced.cost() < bestcost:
+#             bestesop = reduced
+#             bestcost = len(reduced)
+#         #print(f"Number of terms {len(reduced)}")
+#         # for cubered in reduced:
+#         #     print(cubered)
+#         print("------------")
+# # %%
+# np.save("cache/nspace_BT_4.npy", nspace)
+# # %%
+# for cube in bestesop.cubes:
+#     print(cube)
+# # %%
+# bf.valiate_esop(bestesop)
+# # %%
+# np.save("BT_bestesop_4.npy", bestesop)
+# # %%
+# bestesop.cost()
+# # %%
+# len(bestesop)
+# # %%

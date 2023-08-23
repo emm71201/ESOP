@@ -1,18 +1,28 @@
 #%%
-import cube
-import esop
-import helpers
-import truthtable
+from esop_opt import BF
+from cube import Cube
+from esop import ESOP
+from input_string import BString
+from helpers import *
+from numpy import binary_repr, load, save
+from numpy import array as nparray
+from numpy import zeros as npzeros
+from numpy import append as npappend
+import numpy.linalg as nplinalg
 import numpy as np
-import networkx as nx
+import os
+from itertools import product as itproduct
 # %%
-mtable = np.load("../ESOP2tmp/mtable_s108.npy")
+table = load("cache/mtable_s108.npy")
 # %%
-len(mtable[0])
+key = 0
+truth_table = table[key]
+n = 16
 # %%
-n = 8
-length = 2*n
-tt = truthtable.TruthTable(length, mtable[0])
+bf = BF(n, truth_table)
 # %%
-tt.reduce_esop()
+matrix, Y = bf.make_solution_matrix()
+
+# %%
+len(bf)
 # %%

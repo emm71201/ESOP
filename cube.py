@@ -6,8 +6,10 @@ from qiskit import QuantumCircuit , QuantumRegister
 from qiskit.circuit.library import MCXGate
 import string
 from numpy import binary_repr
+
 class Cube:
 
+    
     def __init__(self, expression):
 
         """ instantiate the cube class
@@ -23,6 +25,7 @@ class Cube:
 
         return sum(self.expression[c] != "-" \
                    for c in range(len(self.expression)))
+    
     
     def evaluate_input(self, input):
         assert len(self) == len(input)
@@ -56,7 +59,7 @@ class Cube:
 
         return minterms, noterms
 
-
+    
     def distance(self, other):
 
         assert len(self.expression) == len(other.expression)
@@ -94,10 +97,12 @@ class Cube:
         
         return Cube(new_expression)
 
+    
     def copy(self):
         """ create a new cube with the same data """
 
         return Cube(self.expression)
+    
     
     def change_literal(self, pos, newlit):
 
@@ -106,6 +111,7 @@ class Cube:
         self.expression = new_expression
 
         return
+    
     
     def expansion(self):
 
@@ -151,6 +157,7 @@ class Cube:
         
         return cubes_list
     
+    
     def toffoli_gate(self, labels = None, anc_label = None):
         """ convert the cube to a multi-controlled not gate also called Tofolli gate 
         """
@@ -183,10 +190,12 @@ class Cube:
 
         return qc  
     
+    
     def __len__(self):
 
         return len(self.expression)
 
+    
     def __str__(self):
 
         if self.expression == "-"*len(self.expression):
